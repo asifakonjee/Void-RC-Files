@@ -37,13 +37,8 @@ parse_git_branch() {
   # git rev-parse --abbrev-ref HEAD 2> /dev/null | sed -e 's/.*\/\(.*\)/\1/'
 }
 
-prompt_comment() {
-    DIR="$HOME/.local/share/promptcomments/"
-    MESSAGE="$(find "$DIR"/*.txt | shuf -n1)"
-    cat "$MESSAGE"
-}
-
-PS1="\[\e[01;39m\]{ \[\e[01;32m\]\w \[\e[01;39m\]} \[\e[01;32m\]\[\$ \]\[\e[01;39m\] \[\e[1;37m\]"
+#PS1="\[\e[01;39m\]{ \[\e[01;32m\]\w \[\e[01;39m\]} \[\e[01;32m\]\[\$ \]\[\e[01;39m\] \[\e[1;37m\]"
+PS1="\[\e[1;35m\]\$(parse_git_branch)\[\033[31m\]\$(parse_git_dirty)\]\n\[\e[01;39m\]{ \[\e[01;32m\]\w \[\e[01;39m\]} \[\e[01;39m\] \[\e[1;37m\]"
 #PS1="\[\e[1;36m\]\$(parse_git_branch)\[\033[31m\]\$(parse_git_dirty)\[\033[00m\]\n\w\[\e[1;31m\] \[\e[1;36m\]\[\e[1;37m\] "
 #PS1="\[\e[1;36m\]\$(parse_git_branch)\[\033[31m\]\$(parse_git_dirty)\n\[\033[1;33m\]  \[\e[1;37m\] \w \[\e[1;36m\]\[\e[1;37m\] "
 
@@ -61,7 +56,11 @@ alias ll='exa -l -G --icons --color=always --group-directories-first'  # long fo
 alias ..='cd ..'
 alias gcl='git clone'
 alias cat='bat --theme ansi'
-alias reboot='sudo reboot'
+alias bconf='micro .bashrc'
+alias zconf='micro .zshrc'
+alias battery='upower -i /org/freedesktop/UPower/devices/battery_BAT0'
+alias reboot='loginctl reboot'
+alias poweroff='loginctl poweroff'
 
 figlet KDE Plasma
 

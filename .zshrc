@@ -23,6 +23,7 @@ autoload -U compinit && compinit
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 
 ##------------------- ZSH HISTORY -----------------------##
+
 HISTSIZE=1000
 SAVEHIST=1000
 HISTFILE=~/.zsh_history
@@ -35,22 +36,12 @@ setopt hist_save_no_dups
 setopt hist_ignore_dups
 setopt hist_find_no_dups
 
-##------------------ CHANGE TITLE OF TERMINALS ------------------##
-case ${TERM} in
-  alacritty|st|konsole*)
-    PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/\~}\007"'
-        ;;
-  screen*)
-    PROMPT_COMMAND='echo -ne "\033_${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/\~}\033\\"'
-    ;;
-esac
-
 ##------------------- ZSH PLUGINS -----------------------##
 
 source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 source ~/.zsh/zsh-history-substring-search/zsh-history-substring-search.zsh
-
+source ~/.zsh/colored-man-pages.plugin.zsh
 # History substring search options
 bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
@@ -93,8 +84,9 @@ alias ..='cd ..'
 alias cat='bat --theme ansi'
 alias zconf='micro .zshrc'
 alias bconf='micro .bashrc'
-alias reboot='sudo reboot'
-
+alias battery='upower -i /org/freedesktop/UPower/devices/battery_BAT0'
+alias reboot='loginctl reboot'
+alias poweroff='loginctl poweroff'
 
 figlet KDE Plasma
 
