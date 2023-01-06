@@ -42,6 +42,56 @@ PS1="\[\e[1;35m\]\$(parse_git_branch)\[\033[31m\]\$(parse_git_dirty)\]\n\[\e[01;
 #PS1="\[\e[1;36m\]\$(parse_git_branch)\[\033[31m\]\$(parse_git_dirty)\[\033[00m\]\n\w\[\e[1;31m\] \[\e[1;36m\]\[\e[1;37m\] "
 #PS1="\[\e[1;36m\]\$(parse_git_branch)\[\033[31m\]\$(parse_git_dirty)\n\[\033[1;33m\]  \[\e[1;37m\] \w \[\e[1;36m\]\[\e[1;37m\] "
 
+###----------------- CD COMM ------------------------##
+
+cd() {
+    [[ $# -eq 0 ]] && return
+    builtin cd "$@"
+}
+
+bettercd() {
+    >/dev/null cd $1
+    if [ -z $1 ]
+    then
+        while true;
+        do
+            selection="$(lsd -a | fzf --height 95% --reverse --info hidden --prompt "$(pwd)/" --preview ' cd_pre="$(echo $(pwd)/$(echo {}))";
+                    echo $cd_pre;
+                    echo;
+                    lsd -a --color=always "${cd_pre}";
+                    bat --style=numbers --theme=ansi --color=always {} 2>/dev/null' --bind alt-down:preview-down,alt-up:preview-up --preview-window=right:65%)"
+        if [[ -d "$selection" ]]
+        then
+            >/dev/null cd "$selection"
+        elif [[ -f "$selection" ]]
+        then
+            for file in $selection;
+            do
+                if [[ $file == *.txt ]] || [[ $file == *.sh ]] || [[ $file == *.lua ]] || [[ $file == *.conf ]] || [[ $file == .*rc ]] || [[ $file == *rc ]] || [[ $file == autostart ]] || [[ $file == *.tex ]] || [[ $file == *.py ]]
+                then
+                    micro "$selection"
+                elif [[ $file == *.docx ]] || [[ $file == *.odt ]]
+                then
+                    devour libreoffice "$selection" 2>/dev/null
+                elif [[ $file == *.pdf ]]
+                then
+                    devour evince "$selection"
+                elif [[ $file == *.jpg ]] || [[ $file == *.png ]] || [[ $file == *.xpm ]]
+                then
+                    sxiv "$selection"
+                else [[ $file == *.xcf ]]
+                    devour gimp "$selection"
+            fi
+        done
+        else
+            break
+        fi
+    done
+    fi
+}
+
+alias cd='bettercd'
+
 ##------------------- ALIAS -----------------------##
 alias add='sudo xbps-install'
 alias remove='sudo xbps-remove -R'
