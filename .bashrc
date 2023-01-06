@@ -55,10 +55,10 @@ bettercd() {
     then
         while true;
         do
-            selection="$(lsd -a | fzf --height 95% --reverse --info hidden --prompt "$(pwd)/" --preview ' cd_pre="$(echo $(pwd)/$(echo {}))";
+            selection="$(exa -a --group-directories-first | fzf --height 98% --reverse --info hidden --prompt "$(pwd)/" --preview ' cd_pre="$(echo $(pwd)/$(echo {}))";
                     echo $cd_pre;
                     echo;
-                    lsd -a --color=always "${cd_pre}";
+                    exa -a --group-directories-first --color=always "${cd_pre}";
                     bat --style=numbers --theme=ansi --color=always {} 2>/dev/null' --bind alt-down:preview-down,alt-up:preview-up --preview-window=right:65%)"
         if [[ -d "$selection" ]]
         then
@@ -75,10 +75,10 @@ bettercd() {
                     devour libreoffice "$selection" 2>/dev/null
                 elif [[ $file == *.pdf ]]
                 then
-                    devour evince "$selection"
-                elif [[ $file == *.jpg ]] || [[ $file == *.png ]] || [[ $file == *.xpm ]]
+                    devour okular "$selection"
+                elif [[ $file == *.jpg ]] || [[ $file == *.png ]] || [[ $file == *.xpm ]] || [[ $file == *.jpeg ]]
                 then
-                    sxiv "$selection"
+                    devour gwenview "$selection"
                 else [[ $file == *.xcf ]]
                     devour gimp "$selection"
             fi
