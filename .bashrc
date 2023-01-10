@@ -1,12 +1,20 @@
-# .bashrc
+###################################################################
+##       _        _  __      _    _                _             ##
+##      / \   ___(_)/ _|    / \  | | _____  _ __  (_) ___  ___   ##
+##     / _ \ / __| | |_    / _ \ | |/ / _ \| '_ \ | |/ _ \/ _ \  ##
+##    / ___ \\__ \ |  _|  / ___ \|   < (_) | | | || |  __/  __/  ##
+##   /_/   \_\___/_|_|   /_/   \_\_|\_\___/|_| |_|/ |\___|\___|  ##
+##                                              |__/             ##
+###################################################################
+# This is my bashrc file.
+
+
+export PATH=$PATH:/home/asif/.local/scripts
 
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-#alias ls='ls --color=auto'
-#PS1='[\u@\h \W]\$ '
-
-### CHANGE TITLE OF TERMINALS
+##------------------------ CHANGE TITLE OF TERMINALS -----------------------------##
 case ${TERM} in
   alacritty|st|konsole*)
     PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/\~}\007"'
@@ -16,7 +24,7 @@ case ${TERM} in
     ;;
 esac
 
-##------------------- PROMPT -----------------------##
+##--------------------------------------------- PROMPT -------------------------------------------##
 
 function parse_git_dirty {
   STATUS="$(git status 2> /dev/null)"
@@ -44,21 +52,16 @@ PS1="\[\e[1;35m\]\$(parse_git_branch)\[\033[31m\]\$(parse_git_dirty)\]\n\[\e[01;
 
 ###----------------- CD COMMAND ------------------------##
 
-cd() {
-    [[ $# -eq 0 ]] && return
-    builtin cd "$@"
-}
-
 bettercd() {
     >/dev/null cd $1
     if [ -z $1 ]
     then
         while true;
         do
-            selection="$(exa -a --group-directories-first | fzf --height 98% --reverse --info hidden --prompt "$(pwd)/" --preview ' cd_pre="$(echo $(pwd)/$(echo {}))";
+            selection="$(lsd -a | fzf --height 98% --reverse --info hidden --border rounded --prompt "$(pwd)/" --preview ' cd_pre="$(echo $(pwd)/$(echo {}))";
                     echo $cd_pre;
                     echo;
-                    exa -a --group-directories-first --color=always "${cd_pre}";
+                    lsd -a --color=always "${cd_pre}";
                     bat --style=numbers --theme=ansi --color=always {} 2>/dev/null' --bind alt-down:preview-down,alt-up:preview-up --preview-window=right:65%)"
         if [[ -d "$selection" ]]
         then
@@ -90,7 +93,7 @@ bettercd() {
     fi
 }
 
-alias cd='bettercd'
+alias bcd='bettercd'
 
 ##------------------- ALIAS -----------------------##
 alias add='sudo xbps-install'
@@ -104,14 +107,21 @@ alias ls='exa -a -G --icons --color=always --group-directories-first' # my prefe
 alias la='exa -al -G --icons --color=always --group-directories-first'  # all files and dirs
 alias ll='exa -l -G --icons --color=always --group-directories-first'  # long format
 alias ..='cd ..'
+alias pd='pwd'
 alias gcl='git clone'
 alias cat='bat --theme ansi'
+alias rfm='ranger'
 alias bconf='micro .bashrc'
 alias zconf='micro .zshrc'
 alias battery='upower -i /org/freedesktop/UPower/devices/battery_BAT0'
 alias reboot='loginctl reboot'
 alias poweroff='loginctl poweroff'
 
-figlet KDE Plasma
+##------------------- SCRIPT ALIAS -----------------------##
+alias cdi="fzfimg.sh --preview-window=right:75% --reverse --info hidden"
+alias vsp='vsp.sh'
+alias open='launch.sh'
+##------------------- BASH HOME DECOR --------------------##
 
+figlet KDE Plasma
 neofetch

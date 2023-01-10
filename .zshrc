@@ -20,7 +20,7 @@ autoload -U colors && colors
 autoload -Uz promptinit
 promptinit
 autoload -U compinit && compinit
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
 
 ##------------------- ZSH HISTORY -----------------------##
 
@@ -76,18 +76,27 @@ alias cc='sudo xbps-remove -O'
 alias up='sudo xbps-install -Su'
 alias restart='xcheckrestart'
 alias search='xbps-query -Rs'
-alias ls='exa -a -G --icons --color=always --group-directories-first' # my preferred listing
-alias la='exa -al -G --icons --color=always --group-directories-first'  # all files and dirs
-alias ll='exa -l -G --icons --color=always --group-directories-first'  # long format
+alias ls='exa -a -G --icons --color=always' # my preferred listing
+alias la='exa -al -G --icons --color=always'  # all files and dirs
+alias ll='exa -l -G --icons --color=always'  # long format
 alias gcl='git clone'
 alias ..='cd ..'
+alias pd='pwd'
 alias cat='bat --theme ansi'
+alias rfm='ranger'
 alias zconf='micro .zshrc'
 alias bconf='micro .bashrc'
 alias battery='upower -i /org/freedesktop/UPower/devices/battery_BAT0'
 alias reboot='loginctl reboot'
 alias poweroff='loginctl poweroff'
 
-figlet KDE Plasma
+##------------------- Void SRC SCRIPT ALIAS -----------------------##
+alias vsp='~/.local/scripts/vsp.sh'
+alias cdi="~/.local/scripts/fzfimg.sh --preview-window=right:75% --reverse --border rounded --info hidden"
+alias bcd='~/.local/scripts/bettercd.sh'
+alias open='~/.local/scripts/launch.sh'
 
+##------------------- ZSH HOME DECOR --------------------##
+
+figlet KDE Plasma
 neofetch
